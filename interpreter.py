@@ -34,6 +34,9 @@ class Application(Expression):
     def __repr__(self):
         return f"Application({self.func!r}, {self.arg!r})"
 
+class ASTError(Exception):
+    pass
+
 class AST:
 
     def __init__(self, string):
@@ -60,7 +63,7 @@ class AST:
         if len(stack) == 1:
             self.expression = stack.pop()
         else:
-            raise ValueError("INVALID EXPRESION")
+            raise ASTError("INVALID EXPRESION")
 
 class Value:
 
