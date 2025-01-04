@@ -80,7 +80,7 @@ class ChurchNumeral(Value):
         self.evaluate()
 
     def __repr__(self):
-        return self.val
+        return str(self.val)
 
     def expectLambda(self, exp):
         if not isinstance(exp, Lambda):
