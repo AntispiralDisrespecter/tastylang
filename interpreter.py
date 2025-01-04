@@ -76,25 +76,32 @@ class ChurchNumeral(Value):
     def __repr__(self):
         return self.val
 
+    def expectLambda(self, exp):
+        if not isinstance(exp, Lambda):
+            raise ValueError(f"Expected Lambda. Got {type(exp)}")
+        return exp
+
+    def expectApplication(self, exp):
+        if not isinstance(exp, Application):
+            raise ValueError(f"Expected Application. Got {type(exp)}")
+        return exp
+
+    def expectVar(self, exp):
+        if not isinstance(exp, Var):
+            raise ValueError(f"Expected Var. Got {type(exp)}")
+        return exp
+
     def evaluate(self):
-        l1 = self.exp
-        if not isinstance(l1, Lambda):
-            raise ValueError(f"Expected Lambda. Got {type(l1)}")
-        l2 = l1.body
-        if not isinstance(l1, Lambda):
-            raise ValueError(f"Expected Lambda. Got {type(l2)}")
-        body = l2.body
-        if isinstance(body, Var):
+        l1 = self.expectLambda(self.exp)
+        l2 = self.expectLambda(l1.body)
+        if isinstance(l2.body, Var):
             self.val = 0
             return
-        if not isinstance(body, Application):
-            raise ValueError(f"Expected Application. Got {type(body)}")
+        body = self.expectApplication(l2.body)
         curr, count = body, 0
         while isinstance(curr, Application):
             curr = curr.arg
             count += 1
-        if not isinstance(curr, Var):
-            raise ValueError(f"Expected Var. Got {type(body)}")
+        self.expectVar(curr)
         self.val = count
-
 
