@@ -97,17 +97,25 @@ class ChurchNumeral(Value):
             raise ChurchNumeralError(f"Expected Var. Got {type(exp).__name__}.")
         return exp
 
+    def assertNameMatch(self, var1, var2):
+        if var1.name != var2.name:
+            raise ChurchNumeralError(f"Names {var1!r}, {var2!r} must match.")
+
     def evaluate(self):
         l1 = self.expectLambda(self.exp)
-        l2 = self.expectLambda(l1.body)
+        l2, v1 = self.expectLambda(l1.body), self.expectVar(l1.arg)
         if isinstance(l2.body, Var):
+            self.assertNameMatch(l2.body, l2.arg)
             self.val = 0
             return
-        body = self.expectApplication(l2.body)
+        body, v2 = self.expectApplication(l2.body), self.expectVar(l2.arg)
         curr, count = body, 0
         while isinstance(curr, Application):
+            func = self.expectVar(curr.func)
+            self.assertNameMatch(v1, func)
             curr = curr.arg
             count += 1
-        self.expectVar(curr)
+        v3 = self.expectVar(curr)
+        self.assertNameMatch(v2, v3)
         self.val = count
 
