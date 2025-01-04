@@ -67,6 +67,9 @@ class Value:
     def __init__(self):
         pass
 
+class ChurchNumeralError(Exception):
+    pass
+
 class ChurchNumeral(Value):
 
     def __init__(self, ast):
@@ -78,17 +81,17 @@ class ChurchNumeral(Value):
 
     def expectLambda(self, exp):
         if not isinstance(exp, Lambda):
-            raise ValueError(f"Expected Lambda. Got {type(exp)}")
+            raise ChurchNumeralError(f"Expected Lambda. Got {type(exp).__name__}.")
         return exp
 
     def expectApplication(self, exp):
         if not isinstance(exp, Application):
-            raise ValueError(f"Expected Application. Got {type(exp)}")
+            raise ChurchNumeralError(f"Expected Application. Got {type(exp).__name__}.")
         return exp
 
     def expectVar(self, exp):
         if not isinstance(exp, Var):
-            raise ValueError(f"Expected Var. Got {type(exp)}")
+            raise ChurchNumeralError(f"Expected Var. Got {type(exp).__name__}.")
         return exp
 
     def evaluate(self):
