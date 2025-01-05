@@ -80,7 +80,6 @@ class Value:
         if isinstance(self.exp, Value):
             return self.exp.name
         tokens = []
-        
 
 class ChurchNumeralError(Exception):
     
@@ -132,4 +131,28 @@ class ChurchNumeral(Value):
         v3 = self.expectVar(curr)
         self.assertNameMatch(v2, v3)
         self.val = count
+
+class Interpreter:
+
+    def __init__(self):
+        pass
+
+    def parse(self, string):
+        try:
+            return AST(string)
+        except ASTError as e:
+            print(e)
+
+    def evaluate(self, ast):
+        try:
+            return ChurchNumeral(ast)
+        except ChurchNumeralError as e:
+            print(e)
+
+    def run(self, string):
+        ast = self.parse(string)
+        if ast is not None:
+            val = self.evaluate(ast)
+            if val is not None:
+                return val
 

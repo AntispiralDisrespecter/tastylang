@@ -2,6 +2,7 @@
 import unittest
 
 from interpreter import AST, ASTError, ChurchNumeral, ChurchNumeralError
+from interpreter import Interpreter
 
 class TestEvaluate(unittest.TestCase):
 
@@ -35,6 +36,9 @@ class TestEvaluate(unittest.TestCase):
         except ChurchNumeralError:
             pass
 
+    def test_interpreter_a(self):
+        val = Interpreter().run("aa~b~")
+        self.assertEqual(val.val, 0)
 
 if __name__ == "__main__":
     unittest.main()

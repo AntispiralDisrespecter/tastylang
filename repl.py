@@ -1,26 +1,8 @@
 
-from interpreter import AST, ASTError, ChurchNumeral, ChurchNumeralError
-
-def parse(string):
-    try:
-        return AST(string)
-    except ASTError as e:
-        print(e)
-
-def evaluate(ast):
-    try:
-        return ChurchNumeral(ast)
-    except ChurchNumeralError as e:
-        print(e)
-
-def runInterpreter(string):
-    ast = parse(string)
-    if ast is not None:
-        val = evaluate(ast)
-        if val is not None:
-            print(val)   
+from interpreter import Interpreter
 
 def runREPL():
+    interpreter = Interpreter()
     print("Tasty REPL. Type 'exit' or (CTRL^D) to quit.")
     while True:
         try:
@@ -34,7 +16,8 @@ def runREPL():
             case "exit":
                 break
             case _:
-                runInterpreter(string)
+                res = interpreter.run(string)
+                print(res)
 
 if __name__ == "__main__":
     runREPL()
