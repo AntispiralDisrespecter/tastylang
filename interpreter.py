@@ -1,5 +1,4 @@
 
-
 class Expression:
 
     def __init__(self):
@@ -35,7 +34,9 @@ class Application(Expression):
         return f"Application({self.func!r}, {self.arg!r})"
 
 class ASTError(Exception):
-    pass
+    
+    def __init__(self, message):
+        super().__init__(f"{type(self).__name__}: {message}")
 
 class AST:
 
@@ -47,15 +48,20 @@ class AST:
         return f"{self.expression!r}"
 
     def parse(self):
+
+        def pop2(stack):
+            try:
+                return stack.pop(), stack.pop()
+            except IndexError as e:
+                raise ASTError("INVALID EXPRESSION")
+
         stack = []
         for idx,ch in enumerate(self.string):
             if ch == "~":
-                arg = stack.pop()
-                body = stack.pop()
+                arg, body = pop2(stack)
                 exp = Lambda(arg, body)
             elif ch == "@":
-                func = stack.pop()
-                arg = stack.pop()
+                func, arg = pop2(stack)
                 exp = Application(func, arg)
             else:
                 exp = Var(ch)
@@ -67,11 +73,19 @@ class AST:
 
 class Value:
 
-    def __init__(self):
-        pass
+    def __init__(self, ast):
+        self.exp = ast.expression
+
+    def __repr__(self):
+        if isinstance(self.exp, Value):
+            return self.exp.name
+        tokens = []
+        
 
 class ChurchNumeralError(Exception):
-    pass
+    
+    def __init__(self, message):
+        super().__init__(f"{type(self).__name__}: {message}")
 
 class ChurchNumeral(Value):
 
