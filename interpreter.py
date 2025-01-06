@@ -6,7 +6,7 @@ class Expression:
 
     def __repr__(self):
         return "Expression()"
-
+        
 class Var(Expression):
 
     def __init__(self, name):
@@ -77,19 +77,15 @@ class Value:
         self.exp = ast.expression
 
     def __repr__(self):
-        if isinstance(self.exp, Value):
-            return self.exp.name
-        tokens = []
+        return f"{self.exp!r}"
 
-class ChurchNumeralError(Exception):
-    
-    def __init__(self, message):
-        super().__init__(f"{type(self).__name__}: {message}")
+    def reduce(self):
+        pass    
 
 class ChurchNumeral(Value):
 
     def __init__(self, ast):
-        self.exp = ast.expression
+        super().__init__(ast)
         self.evaluate()
 
     def __repr__(self):
@@ -132,6 +128,16 @@ class ChurchNumeral(Value):
         self.assertNameMatch(v2, v3)
         self.val = count
 
+class EvalError(Exception):
+    
+    def __init__(self, message):
+        super().__init__(f"{type(self).__name__}: {message}")
+
+class ChurchNumeralError(EvalError):
+    
+    def __init__(self, message):
+        pass
+
 class Interpreter:
 
     def __init__(self):
@@ -147,7 +153,7 @@ class Interpreter:
         try:
             return ChurchNumeral(ast)
         except ChurchNumeralError as e:
-            print(e)
+            return Value(ast)
 
     def run(self, string):
         ast = self.parse(string)
