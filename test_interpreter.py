@@ -1,7 +1,7 @@
 
 import unittest
 
-from interpreter import AST, ASTError, ChurchNumeral, ChurchNumeralError
+from interpreter import AST, ASTError, ChurchNumeral, ChurchNumeralError, Identity, IdentityError
 from interpreter import Interpreter
 
 class TestEvaluate(unittest.TestCase):
@@ -17,6 +17,9 @@ class TestEvaluate(unittest.TestCase):
 
     def test_3(self):
         self.assertEqual(ChurchNumeral(AST("ab@b@b@a~b~")).val, 3)
+
+    def test_id_a(self):
+        self.assertEqual(Identity(AST("aa~")).val, "Id")
 
     def test_invalid_ast_a(self):
         try:

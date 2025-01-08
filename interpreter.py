@@ -71,44 +71,76 @@ class AST:
         else:
             raise ASTError("INVALID EXPRESION")
 
+class EvalError(Exception):
+    
+    def __init__(self, message):
+        super().__init__(f"{type(self).__name__}: {message}")
+
+class ChurchNumeralError(EvalError):
+    
+    def __init__(self, message):
+        pass
+
+class IdentityError(EvalError):
+
+    def __init__(self, message):
+        pass
+
 class Value:
 
-    def __init__(self, ast):
+    def __init__(self, ast, error=EvalError):
         self.exp = ast.expression
+        self.Error = error
 
     def __repr__(self):
         return f"{self.exp!r}"
 
+    def expectLambda(self, exp):
+        if not isinstance(exp, Lambda):
+            raise self.Error(f"Expected Lambda. Got {type(exp).__name__}.")
+        return exp
+
+    def expectApplication(self, exp):
+        if not isinstance(exp, Application):
+            raise self.Error(f"Expected Application. Got {type(exp).__name__}.")
+        return exp
+
+    def expectVar(self, exp):
+        if not isinstance(exp, Var):
+            raise self.Error(f"Expected Var. Got {type(exp).__name__}.")
+        return exp
+
+    def assertNameMatch(self, var1, var2):
+        if var1.name != var2.name:
+            raise self.Error(f"Names {var1!r}, {var2!r} must match.")
+
     def reduce(self):
         pass    
 
-class ChurchNumeral(Value):
-
+class Identity(Value):
+    
     def __init__(self, ast):
-        super().__init__(ast)
+        super().__init__(ast, IdentityError)
         self.evaluate()
 
     def __repr__(self):
         return str(self.val)
 
-    def expectLambda(self, exp):
-        if not isinstance(exp, Lambda):
-            raise ChurchNumeralError(f"Expected Lambda. Got {type(exp).__name__}.")
-        return exp
+    def evaluate(self):
+        l1 = self.expectLambda(self.exp)
+        v1, v2 = self.expectVar(l1.arg), self.expectVar(l1.body)
+        self.assertNameMatch(v1, v2)
+        self.val = "Id"
 
-    def expectApplication(self, exp):
-        if not isinstance(exp, Application):
-            raise ChurchNumeralError(f"Expected Application. Got {type(exp).__name__}.")
-        return exp
 
-    def expectVar(self, exp):
-        if not isinstance(exp, Var):
-            raise ChurchNumeralError(f"Expected Var. Got {type(exp).__name__}.")
-        return exp
+class ChurchNumeral(Value):
 
-    def assertNameMatch(self, var1, var2):
-        if var1.name != var2.name:
-            raise ChurchNumeralError(f"Names {var1!r}, {var2!r} must match.")
+    def __init__(self, ast):
+        super().__init__(ast, ChurchNumeralError)
+        self.evaluate()
+
+    def __repr__(self):
+        return str(self.val)
 
     def evaluate(self):
         l1 = self.expectLambda(self.exp)
@@ -128,16 +160,6 @@ class ChurchNumeral(Value):
         self.assertNameMatch(v2, v3)
         self.val = count
 
-class EvalError(Exception):
-    
-    def __init__(self, message):
-        super().__init__(f"{type(self).__name__}: {message}")
-
-class ChurchNumeralError(EvalError):
-    
-    def __init__(self, message):
-        pass
-
 class Interpreter:
 
     def __init__(self):
@@ -153,7 +175,14 @@ class Interpreter:
         try:
             return ChurchNumeral(ast)
         except ChurchNumeralError as e:
-            return Value(ast)
+            pass
+
+        try:
+            return Identity(ast)
+        except IdentityError as e:
+            pass
+
+        return Value(ast)
 
     def run(self, string):
         ast = self.parse(string)
