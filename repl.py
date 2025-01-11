@@ -2,7 +2,6 @@
 from interpreter import Interpreter
 from modes import user, debug
 
-
 class REPLError(Exception):
 
     def __init__(self, message):
@@ -34,7 +33,10 @@ class REPL:
             case "user":
                 return self.interpreter.run(string)
             case "debug":
-                return eval(string)
+                try:
+                    return eval(string, {}, debug.env)
+                except Exception as e:
+                    return e
             case _:
                 raise REPLError(f"NO RUNTIME ENV FOR {self.currMode.name}")
 
