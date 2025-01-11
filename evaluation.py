@@ -52,12 +52,12 @@ class Identity(Value):
     
     def __init__(self, ast):
         super().__init__(ast, IdentityError)
-        self.evaluate()
+        self.validate()
 
     def __repr__(self):
         return str(self.val)
 
-    def evaluate(self):
+    def validate(self):
         l1 = self.expectLambda(self.exp)
         v1, v2 = self.expectVar(l1.arg), self.expectVar(l1.body)
         self.assertNameMatch(v1, v2)
@@ -68,12 +68,12 @@ class ChurchNumeral(Value):
 
     def __init__(self, ast):
         super().__init__(ast, ChurchNumeralError)
-        self.evaluate()
+        self.validate()
 
     def __repr__(self):
         return str(self.val)
 
-    def evaluate(self):
+    def validate(self):
         l1 = self.expectLambda(self.exp)
         l2, v1 = self.expectLambda(l1.body), self.expectVar(l1.arg)
         if isinstance(l2.body, Var):
