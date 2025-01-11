@@ -19,7 +19,8 @@ debug = Mode("debug", "[debug] >> ",
         "Lambda": Lambda,
         "Application": Application,
         "ChurchNumeral": ChurchNumeral,
-        "Identity": Identity
+        "Identity": Identity,
+        "history": {}
     }
 )
 

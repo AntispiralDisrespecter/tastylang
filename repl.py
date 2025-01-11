@@ -21,6 +21,7 @@ class REPL:
 
     def setMode(self, modeName):
         self.currMode = self.modes[modeName]
+        debug.env["history"] = []
 
     def exitMode(self):
         match self.currMode.name:
@@ -30,10 +31,20 @@ class REPL:
                 self.setMode("user")
 
     def pushHistory(self, command):
-        self.history.append(command)
-
+        match self.currMode.name:
+            case "user":
+                self.history.append(command)
+            case "debug":
+                debug.env["history"].append(command)
+                
     def showHistory(self):
-        for idx,command in enumerate(self.history):
+        match self.currMode.name:
+            case "user":
+                history = self.history
+            case "debug":
+                history = debug.env["history"]
+
+        for idx,command in enumerate(history):
             print(f"{idx}: {command}")
 
     def eval(self, string):
@@ -66,9 +77,8 @@ class REPL:
                 case "debug":
                     self.setMode("debug")
                 case _:
-                    res = self.eval(string)
-                    print(res)
-            self.history.append(string)
+                    print(self.eval(string))
+                    self.pushHistory(string)
 
 if __name__ == "__main__":
     repl = REPL()
