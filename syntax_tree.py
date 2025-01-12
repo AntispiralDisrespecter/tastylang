@@ -8,12 +8,47 @@ class ASTError(Exception):
 
 class AST:
 
-    def __init__(self, string):
+    def __init__(self, string, reduce=False):
         self.string = string
         self.parse()
+        if reduce:
+            self.expression = self.reduce()
 
     def __repr__(self):
         return f"{self.expression!r}"
+
+    def fromAST(self, ast, reduce=False):
+        self.string = ast.string
+        self.expression = ast.expression
+        if reduce:
+            self.expression = self.reduce()
+
+    def reduce(self, exp=None):
+
+        def isReduced(exp):
+            if isinstance(exp, Application):
+                if not isinstance(exp.func, Var):
+                    return False
+            return True
+
+        def substitute(left, right):
+            if isinstance(left.body, Var):
+                if left.arg.name == left.body.name:
+                    return right
+            elif isinstance(left.body, Lambda):
+                if left.arg.name == left.body.arg.name:
+                    return left.body
+            raise ASTError("BETA REDUCTION FAILED") 
+
+        if not exp:
+            exp = self.expression
+        if isReduced(exp):
+            return exp
+        if isinstance(exp.func, Lambda):
+            return substitute(exp.func, exp.arg)
+        if isinstance(exp.func, Application):
+            return substitute(self.reduce(exp.func), exp.arg)
+        raise ASTError("BETA REDUCTION FAILED")
 
     def parse(self):
 
@@ -38,4 +73,4 @@ class AST:
             self.expression = stack.pop()
         else:
             raise ASTError("INVALID EXPRESION")
-
+    
