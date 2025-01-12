@@ -20,7 +20,7 @@ debug = Mode("debug", "[debug] >> ",
         "Application": Application,
         "ChurchNumeral": ChurchNumeral,
         "Identity": Identity,
-        "history": {}
+        "history": []
     }
 )
 
