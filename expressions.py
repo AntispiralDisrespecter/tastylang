@@ -36,7 +36,7 @@ class Application(Expression):
     def __init__(self, func, arg):
         if not isinstance(arg, Var):
             raise TypeError(f"FUNCTION {func} MUST BE VAR, GOT {type(func)}")
-        if not isinstance(body, Expression):
+        if not isinstance(arg, Expression):
             raise TypeError(f"ARGUMENT {arg} MUST BE EXPRESSION, GOT {type(arg)}")
         self.func = func
         self.arg = arg
