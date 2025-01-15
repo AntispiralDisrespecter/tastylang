@@ -3,7 +3,6 @@ from evaluation import Value, Identity, ChurchNumeral
 from evaluation import EvalError, IdentityError, ChurchNumeralError
 from syntax_tree import AST, ASTError
 
-
 class Interpreter:
 
     def __init__(self):

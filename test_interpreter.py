@@ -1,9 +1,9 @@
 
 import unittest
 
-from expressions import Expression, Var, Lambda, Application
-from syntax_tree import AST, ASTError
-from evaluation import  ChurchNumeral, ChurchNumeralError, Identity, IdentityError
+from interpreter import AST, ASTError
+from interpreter import ChurchNumeral, ChurchNumeralError
+from interpreter import Identity, IdentityError
 from interpreter import Interpreter
 
 class TestEvaluate(unittest.TestCase):

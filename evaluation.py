@@ -1,6 +1,5 @@
 
-from expressions import Expression, Var, Lambda, Application
-from syntax_tree import AST
+from syntax_tree import AST, Expression, Var, Lambda, Application
 
 class EvalError(Exception):
     
