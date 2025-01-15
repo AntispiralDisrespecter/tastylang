@@ -2,7 +2,7 @@
 class MetaType(type):
     
     def __repr__(cls):
-        return f"<class '{cls.__module__}{cls.__name__}'>"
+        return f"<class '{cls.__module__}.{cls.__name__}'>"
 
 class Expression(metaclass=MetaType):
 
