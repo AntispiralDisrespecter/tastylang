@@ -17,11 +17,12 @@ class AST:
     def __repr__(self):
         return f"{self.expression!r}"
 
-    def fromAST(self, ast, reduce=False):
-        self.string = ast.string
-        self.expression = ast.expression
-        if reduce:
-            self.expression = self.reduce()
+    def __eq__(self, ast):
+        return self.__repr__() == ast.__repr__()
+
+    @classmethod
+    def fromAST(cls, ast, reduce=False):
+        return cls(ast.string, reduce)
 
     def reduce(self, exp=None):
 
@@ -49,6 +50,9 @@ class AST:
         if isinstance(exp.func, Application):
             return substitute(self.reduce(exp.func), exp.arg)
         raise ASTError("BETA REDUCTION FAILED")
+
+    def getReduce(self):
+        return AST(self.string, reduce=True)
 
     def parse(self):
 
