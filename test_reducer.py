@@ -17,5 +17,9 @@ class TestBetaReduce(unittest.TestCase):
     def test_c(self):
         self.assertEqual(AST("aa~bb~@cc~@").getReduce(), AST("aa~"))
 
+    # Reduce Id(0)
+    def test_d(self):
+        self.assertEqual(AST("ab@a~b~cc~@").getReduce(), AST("ab@a~b~"))
+
 if __name__ == "__main__":
     unittest.main()
