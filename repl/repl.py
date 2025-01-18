@@ -1,6 +1,6 @@
 
-from interpreter import Interpreter
-from modes import user, debug
+from core.interpreter import Interpreter as Core
+from .modes import user, debug
 
 class REPLError(Exception):
 
@@ -16,7 +16,7 @@ class REPL:
         if "debug" not in self.modes:
             self.modes["debug"] = debug
         self.currMode = self.modes["user"]
-        self.interpreter = Interpreter()
+        self.interpreter = Core()
         self.history = []
 
     def setMode(self, modeName):

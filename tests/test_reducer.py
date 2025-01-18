@@ -1,7 +1,7 @@
 
 import unittest
 
-from syntax_tree import AST, ASTError
+from core.syntax_tree import AST, ASTError
 
 class TestBetaReduce(unittest.TestCase):
 

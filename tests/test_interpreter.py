@@ -1,10 +1,10 @@
 
 import unittest
 
-from interpreter import AST, ASTError
-from interpreter import ChurchNumeral, ChurchNumeralError
-from interpreter import Identity, IdentityError
-from interpreter import Interpreter
+from core.interpreter import AST, ASTError
+from core.interpreter import ChurchNumeral, ChurchNumeralError
+from core.interpreter import Identity, IdentityError
+from core.interpreter import Interpreter as Core
 
 class TestEvaluate(unittest.TestCase):
 
@@ -42,7 +42,7 @@ class TestEvaluate(unittest.TestCase):
             pass
 
     def test_interpreter_a(self):
-        val = Interpreter().run("aa~b~")
+        val = Core().run("aa~b~")
         self.assertEqual(val.val, 0)
 
 if __name__ == "__main__":

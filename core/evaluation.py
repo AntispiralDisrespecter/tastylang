@@ -1,5 +1,5 @@
 
-from syntax_tree import AST, Expression, Var, Lambda, Application
+from .syntax_tree import AST, Expression, Var, Lambda, Application
 
 class EvalError(Exception):
     
@@ -90,3 +90,7 @@ class ChurchNumeral(Value):
         self.assertNameMatch(v2, v3)
         self.val = count
 
+class Successor:
+
+    def __init__(self):
+        pass

@@ -1,5 +1,5 @@
 
-from expressions import Expression, Var, Lambda, Application
+from .expressions import Expression, Var, Lambda, Application
 
 class ASTError(Exception):
     

@@ -1,7 +1,7 @@
 
-from syntax_tree import AST
-from expressions import Expression, Var, Lambda, Application
-from evaluation import ChurchNumeral, Identity
+from core.syntax_tree import AST
+from core.expressions import Expression, Var, Lambda, Application
+from core.evaluation import ChurchNumeral, Identity
 
 class Mode:
 
