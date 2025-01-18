@@ -46,9 +46,9 @@ class AST:
         if isReduced(exp):
             return exp
         if isinstance(exp.func, Lambda):
-            return substitute(exp.func, exp.arg)
+            return self.reduce(substitute(exp.func, exp.arg))
         if isinstance(exp.func, Application):
-            return substitute(self.reduce(exp.func), exp.arg)
+            return self.reduce(substitute(self.reduce(exp.func), exp.arg))
         raise ASTError("BETA REDUCTION FAILED")
 
     def getReduce(self):
