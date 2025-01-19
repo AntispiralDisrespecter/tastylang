@@ -82,7 +82,7 @@ class REPL:
                 case _:
                     res = self.eval(string)
                     if res is not None:
-                        return res
+                        print(res)
                     self.pushHistory(string)
 
              

@@ -27,8 +27,6 @@ if __name__ == "__main__":
     interpreter = sys.argv[1]
     file = sys.argv[2] if len(sys.argv) == 3 else None
     if file is not None:
-        with open(file) as f:
-            program = f.read()
-        repl = REPL(interpreter, program)
-    repl = REPL(sys.argv[1])
-    repl.run()
+        runFile(interpreter, file)
+    else:
+        runREPL(interpreter)
