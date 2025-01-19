@@ -1,14 +1,26 @@
 
-
 class Scope(dict):
 
-    def __init__(self, parent=None):
-        self.parent = parent
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.parent = kwargs["parent"]
+
+class GlobalScope(Scope):
+
+    def __init__(self, **kwargs):
+        kwargs["parent"] = None
+        super().__init__(**kwargs)
 
 class SymbolTable:
 
     def __init__(self):
-        self.scopes = [Scope()]
+        self.scopes = [GlobalScope()]
+
+    def __repr__(self):
+        return f"{self.scopes!r}"
+    
+    def peek(self):
+        return self.scopes[-1]
 
     def define(self, name, value):
         self.scopes[-1][name] = value
@@ -17,14 +29,12 @@ class SymbolTable:
         for scope in reversed(self.scopes):
             if name in scope:
                 return scope[name]
-        raise NameError(name)
+        return None
     
     def pushScope(self):
-        self.scopes.append(Scope(self.scopes[-1]))
+        self.scopes.append(Scope(parent=self.peek()))
 
     def popScope(self):
-        if self.scopes[-1].parent is None:
+        if isinstance(self.peek(), GlobalScope):
             raise RuntimeError("Cannot pop the global scope")
-        self.scopes.pop()
     
-
