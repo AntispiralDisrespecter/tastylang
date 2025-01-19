@@ -1,5 +1,8 @@
 
+import sys
+
 from core.interpreter import Interpreter as Core
+from meta.interpreter import Interpreter as Meta
 from .modes import user, debug
 
 class REPLError(Exception):
@@ -9,14 +12,14 @@ class REPLError(Exception):
         
 class REPL:
 
-    def __init__(self, **modes):
+    def __init__(self, interpreter, **modes):
         self.modes = modes
         if "user" not in self.modes:
             self.modes["user"] = user
         if "debug" not in self.modes:
             self.modes["debug"] = debug
         self.currMode = self.modes["user"]
-        self.interpreter = Core()
+        self.interpreter = Core() if interpreter == "core" else Meta()
         self.history = []
 
     def setMode(self, modeName):
@@ -77,10 +80,9 @@ class REPL:
                 case "debug":
                     self.setMode("debug")
                 case _:
-                    print(self.eval(string))
+                    res = self.eval(string)
+                    if res is not None:
+                        return res
                     self.pushHistory(string)
 
-if __name__ == "__main__":
-    repl = REPL()
-    repl.run()
              

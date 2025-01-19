@@ -22,4 +22,3 @@ class AST(list):
     def peek(self):
         return self[-1]
 
-        

@@ -11,6 +11,7 @@ class Mode:
         self.env = env
 
 user = Mode("user", ">> ")
+meta = Mode("meta", ">> ")
 debug = Mode("debug", "[debug] >> ",
     env = {
         "AST": AST,

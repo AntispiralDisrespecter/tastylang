@@ -6,6 +6,9 @@ class Interpreter:
     def __init__(self):
         self.symbolTable = SymbolTable()
 
+    def run(self, string):
+        return self.eagerEval(string)
+
     def eagerEval(self, program):
         ast = self.parseProgram(program)
         for node in ast:
