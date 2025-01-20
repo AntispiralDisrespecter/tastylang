@@ -19,7 +19,7 @@ def runFile(interpreter, file):
     runtime = Core() if interpreter == "core" else Meta()
     runtime.run(program)
 
-if __name__ == "__main__":
+def main():
     if len(sys.argv) < 2 or sys.argv[1] not in ["core", "meta"]:
         print("Usage: tasty [core|meta] [file.tasty]")
         sys.exit(1)
@@ -30,3 +30,6 @@ if __name__ == "__main__":
         runFile(interpreter, file)
     else:
         runREPL(interpreter)
+
+if __name__ == "__main__":
+    main()
