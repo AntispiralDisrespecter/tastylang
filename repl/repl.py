@@ -19,7 +19,11 @@ class REPL:
         if "debug" not in self.modes:
             self.modes["debug"] = debug
         self.currMode = self.modes["user"]
-        self.interpreter = Core() if interpreter == "core" else Meta()
+        if interpreter == "meta":
+            self.interpreter = Meta()
+            self.interpreter.attach(Core())
+        else:
+            self.interpreter = Core()
         self.history = []
 
     def setMode(self, modeName):

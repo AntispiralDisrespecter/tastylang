@@ -2,12 +2,13 @@
 import unittest, os, glob
 
 from meta.interpreter import Interpreter as Meta
-
+from core.interpreter import Interpreter as Core
 
 class TestMetalang(unittest.TestCase):
 
     def setUp(self):
         self.meta = Meta()
+        self.meta.attach(Core())
         self.programsDir = os.path.join(os.path.dirname(__file__), "./programs/meta/")
         self.tastyFiles = glob.glob(self.programsDir + "input/*.tasty")
         self.txtFiles = glob.glob(self.programsDir + "gold/*.txt")
@@ -17,9 +18,9 @@ class TestMetalang(unittest.TestCase):
             with open(tasty, "r") as tastyFile:
                 program = tastyFile.read()
                 with open(txt, "r") as txtFile:
-                    expected = txtFile.read()
+                    expected = txtFile.read().strip()
                     res = self.meta.eagerEval(program)
-                    self.assertEqual(res, expected)
+                    self.assertEqual(res.__repr__(), expected)
 
 
 if __name__ == "__main__":

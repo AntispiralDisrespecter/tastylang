@@ -4,19 +4,16 @@ from meta.interpreter import Interpreter as Meta
 from repl import REPL
 
 def runREPL(interpreter):
-    if interpreter not in ["core", "meta"]:
-        print("Usage: tasty [core|meta] [file.tasty]")
-        sys.exit(1)
     repl = REPL(interpreter)
     repl.run()
 
 def runFile(interpreter, file):
-    if interpreter not in ["core", "meta"]:
-        print("Usage: tasty [core|meta] [file.tasty]")
-        sys.exit(1)
     with open(file) as f:
         program = f.read()
-    runtime = Core() if interpreter == "core" else Meta()
+    core = Core()
+    if interpreter == "meta":
+        runtime = Meta()
+        runtime.attach(core)
     runtime.run(program)
 
 def main():

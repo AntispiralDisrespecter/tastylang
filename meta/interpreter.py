@@ -6,6 +6,9 @@ class Interpreter:
     def __init__(self):
         self.symbolTable = SymbolTable()
 
+    def attach(self, core):
+        self.core = core
+
     def run(self, string):
         return self.eagerEval(string)
 
@@ -27,7 +30,7 @@ class Interpreter:
     def evaluateNode(self, node):
         node_type = node["type"]
         if node_type == "assign":
-            self.symbolTable.define(node["name"], node["value"])
+            self.symbolTable.define(node["name"], self.core.run(node["value"]))
         elif node_type == "print":
             print(self.symbolTable.resolve(node["name"]))
         elif node_type == "return":
